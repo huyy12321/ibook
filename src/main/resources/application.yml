@@ -1,0 +1,10 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url:
+    username:
+    password:
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

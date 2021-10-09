@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    #info {font-size: 30px}
+    #info p {font-size: 50px;font-weight: bolder}
+</style>
+<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+<script type="text/javascript" src="layui/layui.js"></script>
+
+<body>
+    <div id="info" style="overflow:scroll;"></div>
+    <div style="color: #1E9FFF;text-align: center;font-size: 50px" onclick="search()" id="a">加载更多</div>
+</body>
+<script src="assets/jquery.min.js?v=3.3.1"></script>
+
+<script>
+    // var ip = "http://localhost:8081/";
+    var ip = "http://112.74.39.252:8081/";
+    window.onload=function() {
+        search();
+        $(window).scroll(function() {
+            var viewH =$(this).height(),//可见高度
+                contentH =$("#info").get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(contentH === viewH + scrollTop + 73){
+                search();
+            }
+        });
+    }
+
+    function search() {
+        $.ajax({
+            url: ip + "test/info1",
+            dataType: "json",
+            data: {
+                id: sessionStorage.getItem("id"),
+                listId: sessionStorage.getItem("listId")
+            },
+            type: "get",
+            success: function (data) {
+                console.log(data);
+                $("#info").append("<p>"+data.data[0].listName+"</p>"+data.data[0].listInfo)
+                sessionStorage.setItem("listId",data.data[1].id);
+            }, error: function () {
+               alert("error");
+                return false;
+            }
+        })
+    }
+</script>
+</html>

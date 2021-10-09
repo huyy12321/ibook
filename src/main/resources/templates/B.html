@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+<script type="text/javascript" src="layui/layui.js"></script>
+
+<body>
+<table id="demo" lay-filter="test"></table>
+</body>
+<script src="assets/jquery.min.js?v=3.3.1"></script>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">查看</button>
+    </div>
+</script>
+<script>
+    layui.use('table', function() {
+        var table = layui.table;
+        var $ = layui.$;
+        // var ip = "http://localhost:8081/";
+        var ip = "http://112.74.39.252:8081/";
+
+        //第一个实例
+        var table1 = table.render({
+            elem: '#demo'
+            ,height: 500
+            ,url: ip + "test/info"
+            ,page: true //开启分页
+            ,where: {id: sessionStorage.getItem("id")}
+            ,cols: [[ //表头
+                {field: 'listName', title: '章节名称', width:400}
+                ,{fixed: 'right', width:150, align:'center', toolbar: '#toolbarDemo'}
+            ]]
+        });
+
+        //触发事件
+        table.on('tool(test)', function(obj){
+            sessionStorage.setItem("listId",obj.data.id);
+            window.location.href="C.html";
+        });
+
+    });
+
+</script>
+</html>
