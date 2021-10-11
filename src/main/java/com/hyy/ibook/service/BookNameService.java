@@ -29,5 +29,5 @@ public interface BookNameService extends IService<BookName> {
      * 同步书籍内容
      * @param id
      */
-    void updateBookInfo(String id);
+    void updateBookInfo(String id,Integer listId);
 }

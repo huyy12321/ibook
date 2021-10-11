@@ -6,44 +6,54 @@
 </head>
 <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
 <script type="text/javascript" src="layui/layui.js"></script>
-
+<style>
+    #list {font-size: 40px;color: rgb(111, 120, 167);}
+    a:hover{text-decoration:underline;}
+</style>
 <body>
-<table id="demo" lay-filter="test"></table>
+    <div id="info">
+        <div style="margin-left: 10%" class="layui-input-inline"><img src="" id="imgUrl"/></div>
+        <div style="width:60%;" class="layui-input-inline">
+            <div id="name" style="font-size: 20px;font-weight: bolder"></div>
+            <div id="account"></div>
+            <div id="bookInfo"></div>
+        </div>
+    </div>
+    <div id="list"></div>
 </body>
 <script src="assets/jquery.min.js?v=3.3.1"></script>
-
-<script type="text/html" id="toolbarDemo">
-    <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="add">查看</button>
-    </div>
-</script>
+<script src="ip.js"></script>
 <script>
-    layui.use('table', function() {
-        var table = layui.table;
-        var $ = layui.$;
-        // var ip = "http://localhost:8081/";
-        var ip = "http://112.74.39.252:8081/";
+    function search() {
+        $.ajax({
+            url: ip + "test/bookList",
+            dataType: "json",
+            data: {
+                id: GetQueryValue("bookId")
+            },
+            type: "get",
+            success: function (data) {
+                $("#imgUrl").attr("src",data.data.bookName.imgUrl);
+                $("#name").text(data.data.bookName.name);
+                $("#account").text("作者：" + data.data.bookName.account);
+                $("#bookInfo").text("简介: "+data.data.bookName.info);
 
-        //第一个实例
-        var table1 = table.render({
-            elem: '#demo'
-            ,height: 500
-            ,url: ip + "test/info"
-            ,page: true //开启分页
-            ,where: {id: sessionStorage.getItem("id")}
-            ,cols: [[ //表头
-                {field: 'listName', title: '章节名称', width:400}
-                ,{fixed: 'right', width:150, align:'center', toolbar: '#toolbarDemo'}
-            ]]
-        });
+                var content = "<dl><dt>目录</dt>";
+                for(var i = 0;i < data.data.bookLists.length;i++) {
+                    content += "<dd><a href='C.html?bookId="+data.data.bookName.id+"&bookListId="+data.data.bookLists[i].id+"'>"
+                        +data.data.bookLists[i].listName+"</a></dd>"
+                }
+                content += "</dl>";
+                $("#list").html(content);
+            }, error: function () {
+                alert("异常");
+                return false;
+            }
+        })
+    }
 
-        //触发事件
-        table.on('tool(test)', function(obj){
-            sessionStorage.setItem("listId",obj.data.id);
-            window.location.href="C.html";
-        });
-
-    });
-
+    window.onload=function() {
+        search();
+    }
 </script>
 </html>

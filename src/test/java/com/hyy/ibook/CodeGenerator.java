@@ -55,7 +55,7 @@ public class CodeGenerator {
 
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
-//      strategy.setInclude("ft_buy_addition"); 单独一张表
+      strategy.setInclude("keyword");
         // 数据库表映射到实体的命名策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 数据库表字段映射到实体的命名策略

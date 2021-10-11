@@ -3,16 +3,10 @@ package com.hyy.ibook.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyy.ibook.Entity.BookList;
-import com.hyy.ibook.Entity.BookName;
-import com.hyy.ibook.Entity.Channel;
-import com.hyy.ibook.Entity.SearchKey;
+import com.hyy.ibook.Entity.*;
 import com.hyy.ibook.mapper.BookNameMapper;
-import com.hyy.ibook.service.BookListService;
-import com.hyy.ibook.service.BookNameService;
+import com.hyy.ibook.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hyy.ibook.service.ChannelService;
-import com.hyy.ibook.service.SearchKeyService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -54,10 +48,22 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
     private SearchKeyService searchKeyService;
     @Resource
     private BookListService bookListService;
+    @Resource
+    private KeywordService keywordService;
 
     @Override
     @Async
     public void updateBookName(String keyword) {
+        Keyword keyword1 = keywordService.getOne(Wrappers.<Keyword>lambdaQuery()
+                .eq(Keyword::getKeyword, keyword));
+        if(keyword1 == null) {
+            keywordService.save(Keyword.builder().keyword(keyword).updateTime(LocalDateTime.now()).build());
+        } else{
+            keyword1.setUpdateTime(LocalDateTime.now());
+            keyword1.setCount(keyword1.getCount() + 1);
+            keywordService.updateById(keyword1);
+        }
+
         List<Channel> list = channelService.list();
         for(Channel channel : list) {
             SearchKey one = searchKeyService.getOne(Wrappers.<SearchKey>lambdaQuery().
@@ -152,12 +158,15 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
                 IPage<BookList> page = bookListService.page(new Page<>(1, 1), Wrappers.<BookList>lambdaQuery().
                         eq(BookList::getBookId, Integer.valueOf(id)).orderByDesc(BookList::getId));
                 String href = document.getElementById("info").child(4).child(0).attr("href");
+                String src = document.getElementById("fmimg").child(0).attr("src");
+
+                bookName.setImgUrl(channel.getChannelUrl() + src);
+                bookName.setUpdateTime(LocalDateTime.now());
+                baseMapper.updateById(bookName);
 
                 if(page.getTotal() > 0 && href.equals(page.getRecords().get(0).getListId())) {
                     return;
                 }
-                bookName.setUpdateTime(LocalDateTime.now());
-                baseMapper.updateById(bookName);
 
                 for(Element element : document.getElementsByTag("dt").get(1).nextElementSiblings()) {
                     String listId = element.child(0).attr("href");
@@ -190,46 +199,43 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
     }
 
     @Override
-    @Async
-    public void updateBookInfo(String id) {
+    public void updateBookInfo(String id,Integer listId) {
         BookName bookName = baseMapper.selectById(id);
         Channel channel = channelService.getById(bookName.getChannelId());
-        List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery().
-                eq(BookList::getBookId, id).
-                isNull(BookList::getListInfo));
+        BookList bookList = bookListService.getById(listId);
 
-        for(BookList bookList : list) {
-            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        if(StringUtils.isNotBlank(bookList.getListInfo())) {
+            return;
+        }
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-            HttpGet httpGet = new HttpGet(channel.getChannelUrl() + bookList.getListId());
-            CloseableHttpResponse response = null;
+        HttpGet httpGet = new HttpGet(channel.getChannelUrl() + bookList.getListId());
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+            // 从响应模型中获取响应实体
+            HttpEntity responseEntity = response.getEntity();
+            System.out.println("响应状态为:" + response.getStatusLine());
+            if (responseEntity != null) {
+                Document document = Jsoup.parse(EntityUtils.toString(responseEntity, "UTF-8"));
+                System.out.println(document.getElementsByClass("bookname").first().child(0).text());
+                bookList.setListInfo(document.getElementById("content").toString());
+                bookList.setUpdateTime(LocalDateTime.now());
+                bookListService.updateById(bookList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try {
-                response = httpClient.execute(httpGet);
-                // 从响应模型中获取响应实体
-                HttpEntity responseEntity = response.getEntity();
-                System.out.println("响应状态为:" + response.getStatusLine());
-                if (responseEntity != null) {
-                    Document document = Jsoup.parse(EntityUtils.toString(responseEntity, "UTF-8"));
-                    System.out.println(document.getElementsByClass("bookname").first().child(0).text());
-                    bookList.setListInfo(document.getElementById("content").toString());
-                    bookList.setUpdateTime(LocalDateTime.now());
-                    bookListService.updateById(bookList);
-                    Thread.sleep(1000);
+                // 释放资源
+                if (httpClient != null) {
+                    httpClient.close();
                 }
-            } catch (Exception e) {
+                if (response != null) {
+                    response.close();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    // 释放资源
-                    if (httpClient != null) {
-                        httpClient.close();
-                    }
-                    if (response != null) {
-                        response.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

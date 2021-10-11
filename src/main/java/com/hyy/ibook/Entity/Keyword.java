@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author hyy
- * @since 2021-10-08
+ * @since 2021-10-11
  */
 @Data
 @Builder
@@ -22,29 +22,18 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class BookName implements Serializable {
+public class Keyword implements Serializable {
 
     private static final long serialVersionUID=1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String name;
+    private String keyword;
 
-    private Integer channelId;
+    private Integer count;
 
     private LocalDateTime updateTime;
 
-    private String bookId;
 
-    /**
-     * 简介
-     */
-    private String info;
-
-    private String account;
-
-    private String imgUrl;
-
-    private Integer heat;
 }
