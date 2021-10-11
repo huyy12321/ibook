@@ -33,6 +33,9 @@
             },
             type: "get",
             success: function (data) {
+                if(data.data.bookLists.length === 0) {
+                    alert("首次搜索，正在查询。。请稍后刷新");
+                }
                 $("#imgUrl").attr("src",data.data.bookName.imgUrl);
                 $("#name").text(data.data.bookName.name);
                 $("#account").text("作者：" + data.data.bookName.account);
