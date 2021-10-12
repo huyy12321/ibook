@@ -2,6 +2,7 @@ package com.hyy.ibook;
 
 import com.hyy.ibook.Entity.BookList;
 import com.hyy.ibook.Entity.BookName;
+import com.hyy.ibook.VO.BookListVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ import java.util.List;
 public class BookVO {
     private BookName bookName;
 
-    private List<BookList> bookLists;
+    private List<BookListVO> bookLists;
 }

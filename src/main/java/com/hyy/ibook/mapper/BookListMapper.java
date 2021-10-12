@@ -2,6 +2,10 @@ package com.hyy.ibook.mapper;
 
 import com.hyy.ibook.Entity.BookList;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hyy.ibook.VO.BookListVO;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface BookListMapper extends BaseMapper<BookList> {
 
+    @Select("SELECT id,list_name,book_id FROM book_list WHERE (book_id = #{bookId})")
+    List<BookListVO> listvo(Integer bookId);
 }

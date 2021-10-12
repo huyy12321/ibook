@@ -8,10 +8,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyy.ibook.BookVO;
 import com.hyy.ibook.Entity.BookList;
 import com.hyy.ibook.Entity.BookName;
+import com.hyy.ibook.VO.BookListVO;
 import com.hyy.ibook.service.BookListService;
 import com.hyy.ibook.service.BookNameService;
-import com.hyy.ibook.service.ChannelService;
-import com.hyy.ibook.service.SearchKeyService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +47,7 @@ public class Test {
     @RequestMapping("/bookList")
     public R<BookVO> bookList(@RequestParam String id){
         BookName byId = bookNameService.getById(id);
-        List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery()
-                .eq(BookList::getBookId, id));
+        List<BookListVO> list = bookListService.listvo(Integer.valueOf(id));
         bookNameService.updateBookList(id);
         byId.setHeat(byId.getHeat() + 1);
         bookNameService.updateById(byId);

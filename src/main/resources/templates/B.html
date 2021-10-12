@@ -15,7 +15,8 @@
         <div style="margin-left: 10%" class="layui-input-inline"><img src="" id="imgUrl"/></div>
         <div style="width:60%;" class="layui-input-inline">
             <div id="name" style="font-size: 20px;font-weight: bolder"></div>
-            <div id="account"></div>
+            <div id="account" style="float: left"></div>
+            <div id="bookrack" onclick="add()" style="color: #1E9FFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加入收藏</div>
             <div id="bookInfo"></div>
         </div>
     </div>
@@ -41,6 +42,17 @@
                 $("#account").text("作者：" + data.data.bookName.account);
                 $("#bookInfo").text("简介: "+data.data.bookName.info);
 
+                var bookrack = localStorage.getItem("bookrack");
+                if(bookrack != null) {
+                    var list = JSON.parse(bookrack);
+                    for(var i =0;i<list.length;i++) {
+                        if(list[i].id === GetQueryValue("bookId")) {
+                            $("#bookrack").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取消收藏");
+                            $("#bookrack").attr("onclick","cancel()");
+                        }
+                    }
+                }
+
                 var content = "<dl><dt>目录</dt>";
                 for(var i = 0;i < data.data.bookLists.length;i++) {
                     content += "<dd><a href='C.html?bookId="+data.data.bookName.id+"&bookListId="+data.data.bookLists[i].id+"'>"
@@ -53,6 +65,35 @@
                 return false;
             }
         })
+    }
+
+    function add() {
+        var bookrack = localStorage.getItem("bookrack");
+        var book = {id:GetQueryValue("bookId"),name: $("#name").text(),account:$("#account").text()};
+        var list = JSON.parse(bookrack);
+        if(bookrack != null) {
+            list.push(book);
+        } else{
+            list = [book];
+        }
+        localStorage.setItem("bookrack",JSON.stringify(list));
+        $("#bookrack").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取消收藏");
+        $("#bookrack").removeAttr("onclick").attr("onclick","cancel()");
+    }
+
+    function cancel() {
+        var bookrack = localStorage.getItem("bookrack");
+        var list = JSON.parse(bookrack);
+        if(list != null) {
+            for(var i = 0;i<list.length;i++) {
+                if(list[i].id === GetQueryValue("bookId"));
+                list.splice(i,1);
+                break;
+            }
+        }
+        $("#bookrack").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加入收藏");
+        localStorage.setItem("bookrack",JSON.stringify(list));
+         $("#bookrack").attr("onclick","add()");
     }
 
     window.onload=function() {

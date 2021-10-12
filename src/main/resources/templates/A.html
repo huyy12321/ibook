@@ -6,9 +6,11 @@
 </head>
 <style>
     #content a {font-size: 20px;color: rgb(111, 120, 167);}
+    #myBook a {font-size: 20px;color: rgb(111, 120, 167);}
     a:hover{text-decoration:underline;}
     #top {margin-left: 20%}
     #name {width: 400px;height: 60px;}
+    #more {text-align: center;font-size: 20px;color: #01AAED}
 </style>
 
 <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
@@ -22,11 +24,14 @@
             <button type="button" class="layui-btn layui-btn-danger" id="search" onclick="search()"><i class="layui-icon layui-icon-search"></i></button>
         </div>
     </div>
+    <div id="myBook"></div>
     <div id="content"></div>
+    <div onclick="next()" id="more">加载更多</div>
 </body>
 <script src="assets/jquery.min.js?v=3.3.1"></script>
 <script src="ip.js"></script>
 <script>
+    var limit = 20;
     function search() {
         $.ajax({
             url: ip + "test/book",
@@ -34,11 +39,11 @@
             data: {
                 keyword: $("#name").val(),
                 page: 1,
-                limit: 20
+                limit: limit
             },
             type: "get",
             success: function (data) {
-                var content = "";
+                var content = "<div>搜索结果</div>";
                 for(var i = 0;i < data.data.length;i++) {
                     content += "<div><a href='B.html?bookId="+data.data[i].id+"'>"+data.data[i].name+"</a>"+"/"+data.data[i].account+"</div>"
                 }
@@ -48,6 +53,26 @@
                 return false;
             }
         })
+    }
+    
+    function bookrack() {
+        var bookrack = localStorage.getItem("bookrack");
+        console.log(bookrack);
+        if(bookrack != null) {
+            var list = JSON.parse(bookrack);
+            var books = "<div>我的书架</div>";
+            for(var i =0;i<list.length;i++) {
+                books += "<div><a href='B.html?bookId="+list[i].id+"'>"+list[i].name+"</a>"+"/"+list[i].account+"</div>"
+            }
+            books += "<hr>"
+            $("#myBook").html(books);
+        }
+
+    }
+
+    function next() {
+        limit = limit + 20;
+        search();
     }
     var input = document.getElementById("name");
     input.addEventListener("keyup", function(event) {
@@ -59,6 +84,7 @@
 
     window.onload=function() {
         search();
+        bookrack();
     }
 
 </script>

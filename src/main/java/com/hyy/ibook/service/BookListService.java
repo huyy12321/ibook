@@ -2,6 +2,9 @@ package com.hyy.ibook.service;
 
 import com.hyy.ibook.Entity.BookList;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hyy.ibook.VO.BookListVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BookListService extends IService<BookList> {
 
+    List<BookListVO> listvo(Integer bookId);
 }
