@@ -5,7 +5,7 @@ package com.hyy.ibook.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyy.ibook.BookVO;
+import com.hyy.ibook.VO.BookVO;
 import com.hyy.ibook.Entity.BookList;
 import com.hyy.ibook.Entity.BookName;
 import com.hyy.ibook.VO.BookListVO;
@@ -64,4 +64,19 @@ public class Test {
         return R.ok(page.getRecords());
     }
 
+    @RequestMapping("/down/{id}")
+    public R<String> down(@PathVariable Integer id) {
+        BookName byId = bookNameService.getById(id);
+        switch (byId.getDownStatus()) {
+            case 0:
+                bookNameService.down(id);
+                return R.fail("首次下载，需要一段时间整合数据，请一段时间后再来尝试");
+            case 1:
+                return R.fail("资源整合中，请稍后在下载");
+            case 2:
+                return R.ok(byId.getDownUrl());
+            default:
+                return R.fail("发生异常");
+        }
+    }
 }

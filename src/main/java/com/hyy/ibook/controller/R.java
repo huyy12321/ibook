@@ -80,6 +80,13 @@ public class R<T> implements Serializable {
         return objectR;
     }
 
+    public static <T> com.hyy.ibook.controller.R<T> fail(String msg) {
+        com.hyy.ibook.controller.R<T> objectR = new com.hyy.ibook.controller.R<>();
+        objectR.setCode(500);
+        objectR.setMsg(msg);
+        return objectR;
+    }
+
 
 }
 

@@ -47,4 +47,13 @@ public class BookName implements Serializable {
     private String imgUrl;
 
     private Integer heat;
+
+    private String downUrl;
+
+    private Integer downNewList;
+
+    /**
+     * 下载的状态 0未下载 1整合资源中 2可下载
+     */
+    private Integer downStatus;
 }

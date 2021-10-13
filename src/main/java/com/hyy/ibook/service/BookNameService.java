@@ -30,4 +30,6 @@ public interface BookNameService extends IService<BookName> {
      * @param id
      */
     void updateBookInfo(String id,Integer listId);
+
+    void down(Integer id);
 }

@@ -16,7 +16,8 @@
         <div style="width:60%;" class="layui-input-inline">
             <div id="name" style="font-size: 20px;font-weight: bolder"></div>
             <div id="account" style="float: left"></div>
-            <div id="bookrack" onclick="add()" style="color: #1E9FFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加入收藏</div>
+            <div id="bookrack" onclick="add()" style="color: #1E9FFF;float: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加入收藏</div>
+            <div id="down" onclick="down()" style="color: #1E9FFF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下载书籍</div>
             <div id="bookInfo"></div>
         </div>
     </div>
@@ -79,6 +80,24 @@
         localStorage.setItem("bookrack",JSON.stringify(list));
         $("#bookrack").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;取消收藏");
         $("#bookrack").removeAttr("onclick").attr("onclick","cancel()");
+    }
+
+    function down() {
+        $.ajax({
+            url: ip + "test/down/" + GetQueryValue("bookId"),
+            dataType: "json",
+            type: "get",
+            success: function (data) {
+                if(data.code === 500) {
+                    alert(data.msg);
+                } else{
+                    window.location.href=data.data;
+                }
+            }, error: function () {
+                alert("异常");
+                return false;
+            }
+        })
     }
 
     function cancel() {

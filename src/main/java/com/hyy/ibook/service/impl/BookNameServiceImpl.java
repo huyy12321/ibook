@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -238,5 +238,52 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    @Async
+    public void down(Integer id) {
+        BookName bookName = baseMapper.selectById(id);
+        baseMapper.updateById(BookName.builder().id(id).downStatus(1).build());
+        List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery()
+                .eq(BookList::getBookId, id).isNull(BookList::getListInfo));
+
+        for(BookList bookList : list) {
+            updateBookInfo(id.toString(),bookList.getId());
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<BookList> list1 = bookListService.list(Wrappers.<BookList>lambdaQuery().eq(BookList::getBookId, id));
+        File file = new File("/hyy/static/book/"+bookName.getName() + ".txt");
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(file);
+            for(BookList bookList : list1) {
+                fileOutputStream.write(bookList.getListName().getBytes());
+                fileOutputStream.write(bookList.getListInfo()
+                        .replace("<div id=\"content\">","")
+                        .replace("&nbsp;&nbsp;&nbsp;&nbsp;","")
+                        .replace("<br>","")
+                        .replace("</div>","")
+                        .getBytes());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        baseMapper.updateById(BookName.builder().id(id)
+                .downUrl("http://112.74.39.252/static1/book/" +bookName.getName() +".txt")
+                .downNewList(list1.get(list1.size()-1).getId()).downStatus(2).build());
     }
 }

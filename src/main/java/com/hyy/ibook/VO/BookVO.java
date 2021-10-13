@@ -1,4 +1,4 @@
-package com.hyy.ibook;
+package com.hyy.ibook.VO;
 
 import com.hyy.ibook.Entity.BookList;
 import com.hyy.ibook.Entity.BookName;
