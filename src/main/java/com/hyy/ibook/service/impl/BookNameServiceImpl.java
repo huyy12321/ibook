@@ -244,13 +244,13 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
     @Async
     public void down(Integer id) {
         BookName bookName = baseMapper.selectById(id);
-        baseMapper.updateById(BookName.builder().id(id).downStatus(1).build());
+
         List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery()
                 .eq(BookList::getBookId, id).isNull(BookList::getListInfo));
-
         if(StringUtils.isNotBlank(bookName.getDownUrl()) && list.size() == 0) {
             return;
         }
+        baseMapper.updateById(BookName.builder().id(id).downStatus(1).build());
         for(BookList bookList : list) {
             updateBookInfo(id.toString(),bookList.getId());
             try {
