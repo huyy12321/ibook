@@ -72,7 +72,11 @@ public class Test {
                 bookNameService.down(id);
                 return R.fail("首次下载，需要一段时间整合数据，请一段时间后再来尝试");
             case 1:
-                return R.fail("正文获取中，请稍后在尝试下载");
+                List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery()
+                        .eq(BookList::getBookId, id));
+                int total = list.size();
+                int size = (int) list.stream().filter(t -> StringUtils.isNotBlank(t.getListInfo())).count();
+                return R.fail("正文获取中:"+size+"/"+total+"，请稍后在尝试下载");
             case 2:
                 bookNameService.down(id);
                 return R.ok(byId.getDownUrl());
