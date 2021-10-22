@@ -34,11 +34,16 @@ public class Test {
     public R<List<BookName>> book(@RequestParam(required = false) String keyword,
                                   @RequestParam Integer page,
                                   @RequestParam Integer limit){
+        if(StringUtils.isNotBlank(keyword)) {
+            bookNameService.updateBookName(keyword);
+        }
         IPage<BookName> rs = bookNameService.page(new Page<>(page, limit), Wrappers.<BookName>lambdaQuery().
                 like(StringUtils.isNotBlank(keyword),BookName::getName, keyword).
                 orderByDesc(BookName::getHeat));
-        if(StringUtils.isNotBlank(keyword)) {
-            bookNameService.updateBookName(keyword);
+        if(rs.getTotal() == 0) {
+            rs = bookNameService.page(new Page<>(page, limit), Wrappers.<BookName>lambdaQuery().
+                    like(StringUtils.isNotBlank(keyword),BookName::getName, keyword).
+                    orderByDesc(BookName::getHeat));
         }
         return R.ok(rs.getRecords(),rs.getTotal());
     }

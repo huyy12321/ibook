@@ -15,7 +15,7 @@
 
 <body>
     <div id="info"></div>
-    <div style="text-align: center;">
+    <div style="text-align: center;" id="next">
         <a id="list">目录</a>&nbsp;&nbsp;&nbsp;&nbsp;
         <a id="next">下一章</a>
     </div>
@@ -28,7 +28,18 @@
     var next = "";
     window.onload=function() {
         search();
+        $(window).scroll(function() {
+            var viewH =$(this).height(),//可见高度
+                contentH =$("#info").get(0).scrollHeight,//内容高度
+                next =$("#next").get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(contentH === viewH + scrollTop - next){
+                search();
+            }
+            console.log(contentH - viewH - scrollTop + next)
+        });
     }
+
 
     function search() {
         $.ajax({

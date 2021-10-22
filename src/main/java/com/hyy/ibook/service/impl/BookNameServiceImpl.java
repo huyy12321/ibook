@@ -268,7 +268,7 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
             for(BookList bookList : list1) {
                 fileOutputStream.write(bookList.getListName().getBytes());
                 fileOutputStream.write(bookList.getListInfo()
-                        .replace("<div id=\"content\">","")
+                        .replace("<div id=\"center_tip\">","")
                         .replace("&nbsp;&nbsp;&nbsp;&nbsp;","")
                         .replace("<br>","")
                         .replace("</div>","")
