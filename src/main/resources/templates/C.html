@@ -15,7 +15,7 @@
 
 <body>
     <div id="info"></div>
-    <div style="text-align: center;" id="next">
+    <div style="text-align: center;" id="next1">
         <a id="list">目录</a>&nbsp;&nbsp;&nbsp;&nbsp;
         <a id="next">下一章</a>
     </div>
@@ -26,17 +26,17 @@
 <script src="ip.js"></script>
 <script>
     var next = "";
+    var nextId;
     window.onload=function() {
         search();
         $(window).scroll(function() {
             var viewH =$(this).height(),//可见高度
                 contentH =$("#info").get(0).scrollHeight,//内容高度
-                next =$("#next").get(0).scrollHeight,//内容高度
+                next1 =$("#next1").get(0).scrollHeight,//内容高度
                 scrollTop =$(this).scrollTop();//滚动高度
-            if(contentH === viewH + scrollTop - next){
-                search();
+            if(contentH === viewH + scrollTop - next1){
+                nextPage();
             }
-            console.log(contentH - viewH - scrollTop + next)
         });
     }
 
@@ -54,8 +54,34 @@
                 $("#info").append("<p>"+data.data[0].listName+"</p>"+data.data[0].listInfo);
                 $("#list").attr("href","B.html?bookId="+GetQueryValue("bookId"));
                 $("#next").attr("href","C.html?bookId="+GetQueryValue("bookId") + "&bookListId=" + data.data[1].id);
+                nextId = data.data[1].id;
+                localStorage.setItem(GetQueryValue("bookId"),GetQueryValue("bookListId"));
+                localStorage.setItem("listName-"+GetQueryValue("bookId"),data.data[0].listName);
             }, error: function () {
                alert("error");
+                return false;
+            }
+        })
+    }
+
+    function nextPage() {
+        $.ajax({
+            url: ip + "test/info",
+            dataType: "json",
+            data: {
+                id: GetQueryValue("bookId"),
+                listId: nextId
+            },
+            type: "get",
+            success: function (data) {
+                $("#info").append("<p>"+data.data[0].listName+"</p>"+data.data[0].listInfo);
+                $("#list").attr("href","B.html?bookId="+GetQueryValue("bookId"));
+                $("#next").attr("href","C.html?bookId="+GetQueryValue("bookId") + "&bookListId=" + data.data[1].id);
+                nextId = data.data[1].id;
+                localStorage.setItem(GetQueryValue("bookId"),GetQueryValue("bookListId"));
+                localStorage.setItem("listName-"+GetQueryValue("bookId"),data.data[0].listName);
+            }, error: function () {
+                alert("error");
                 return false;
             }
         })
