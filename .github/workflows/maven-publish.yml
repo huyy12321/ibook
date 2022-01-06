@@ -26,5 +26,5 @@ jobs:
         username: ${{ secrets.USERNAME }}
         port: 22
         password: ${{ secrets.PASSWORD }}
-        source: "./target/ibook-0.0.1-SNAPSHOT.jar"
+        source: "./ibook-0.0.1-SNAPSHOT.jar"
         target: "/hyy/ibook"
