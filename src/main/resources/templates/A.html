@@ -7,6 +7,8 @@
 <style>
     #content a {font-size: 20px;color: rgb(111, 120, 167);}
     #myBook a {font-size: 20px;color: rgb(111, 120, 167);}
+    #content {width: 45%;float: left;border-right: #eb7350 solid 1px;margin-top: 20px;}
+    #myBook {width: 45%;float: left;margin-top: 20px;margin-left: 20px;}
     a:hover{text-decoration:underline;}
     #top {margin-left: 20%}
     #name {width: 400px;height: 60px;}
@@ -24,14 +26,14 @@
             <button type="button" class="layui-btn layui-btn-danger" id="search" onclick="search()"><i class="layui-icon layui-icon-search"></i></button>
         </div>
     </div>
-    <div id="myBook"></div>
     <div id="content"></div>
-    <div onclick="next()" id="more">加载更多</div>
+    <div id="myBook"></div>
+
 </body>
 <script src="assets/jquery.min.js?v=3.3.1"></script>
 <script src="ip.js"></script>
 <script>
-    var limit = 20;
+    var limit = 10;
     function search() {
         $.ajax({
             url: ip + "test/book",
@@ -47,6 +49,7 @@
                 for(var i = 0;i < data.data.length;i++) {
                     content += "<div><a href='B.html?bookId="+data.data[i].id+"'>"+data.data[i].name+"</a>"+"/"+data.data[i].account+"</div>"
                 }
+                content += "<hr><div onclick=\"next()\" id=\"more\">加载更多</div>";
                 $("#content").html(content);
             }, error: function () {
                 alert("异常");
@@ -64,14 +67,13 @@
             for(var i =0;i<list.length;i++) {
                 books += "<div><a href='B.html?bookId="+list[i].id+"'>"+list[i].name+"</a>"+"/"+list[i].account+"</div>"
             }
-            books += "<hr>"
             $("#myBook").html(books);
         }
 
     }
 
     function next() {
-        limit = limit + 20;
+        limit = limit + limit;
         search();
     }
     var input = document.getElementById("name");

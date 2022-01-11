@@ -4,6 +4,7 @@ package com.hyy.ibook.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hyy.ibook.VO.BookVO;
 import com.hyy.ibook.Entity.BookList;
@@ -41,11 +42,16 @@ public class Test {
                 like(StringUtils.isNotBlank(keyword),BookName::getName, keyword).
                 orderByDesc(BookName::getHeat));
         if(rs.getTotal() == 0) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             rs = bookNameService.page(new Page<>(page, limit), Wrappers.<BookName>lambdaQuery().
                     like(StringUtils.isNotBlank(keyword),BookName::getName, keyword).
                     orderByDesc(BookName::getHeat));
         }
-        return R.ok(rs.getRecords(),rs.getTotal());
+        return R.ok(rs.getRecords());
     }
 
 
@@ -75,18 +81,26 @@ public class Test {
         switch (byId.getDownStatus()) {
             case 0:
                 bookNameService.down(id);
-                return R.fail("首次下载，需要一段时间整合数据，请一段时间后再来尝试");
+                return R.failed("首次下载，需要一段时间整合数据，请一段时间后再来尝试");
             case 1:
                 List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery()
                         .eq(BookList::getBookId, id));
                 int total = list.size();
                 int size = (int) list.stream().filter(t -> StringUtils.isNotBlank(t.getListInfo())).count();
-                return R.fail("正文获取中:"+size+"/"+total+"，请稍后在尝试下载");
+                return R.failed("正文获取中:"+size+"/"+total+"，请稍后在尝试下载");
             case 2:
                 bookNameService.down(id);
                 return R.ok(byId.getDownUrl());
             default:
-                return R.fail("发生异常");
+                return R.failed("发生异常");
+        }
+    }
+
+    @RequestMapping("/down1")
+    public void down1() {
+        List<BookName> list = bookNameService.list(Wrappers.<BookName>lambdaQuery().isNull(BookName::getInfo));
+        for(BookName bookName : list) {
+            bookNameService.updateBookList(bookName.getId().toString());
         }
     }
 }

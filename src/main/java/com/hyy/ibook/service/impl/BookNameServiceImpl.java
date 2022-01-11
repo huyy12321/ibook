@@ -159,18 +159,18 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
                     return;
                 }
 
-//                for(Element element : document.getElementsByTag("dt").get(1).nextElementSiblings()) {
-//                    String listId = element.child(0).attr("href");
-//                    BookList one = bookListService.getOne(Wrappers.<BookList>lambdaQuery().
-//                            eq(BookList::getBookId, Integer.valueOf(id)).
-//                            eq(BookList::getListId, listId));
-//                    if(one == null) {
-//                        bookListService.save(BookList.builder().bookId(Integer.valueOf(id)).
-//                                listId(listId).
-//                                listName(element.child(0).text()).
-//                                updateTime(LocalDateTime.now()).build());
-//                    }
-//                }
+                for(Element element : document.getElementsByTag("dt").get(1).nextElementSiblings()) {
+                    String listId = element.child(0).attr("href");
+                    BookList one = bookListService.getOne(Wrappers.<BookList>lambdaQuery().
+                            eq(BookList::getBookId, Integer.valueOf(id)).
+                            eq(BookList::getListId, listId));
+                    if(one == null) {
+                        bookListService.save(BookList.builder().bookId(Integer.valueOf(id)).
+                                listId(listId).
+                                listName(element.child(0).text()).
+                                updateTime(LocalDateTime.now()).build());
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
