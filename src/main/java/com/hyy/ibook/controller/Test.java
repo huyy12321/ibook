@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hyy.ibook.Entity.Channel;
 import com.hyy.ibook.VO.BookVO;
 import com.hyy.ibook.Entity.BookList;
 import com.hyy.ibook.Entity.BookName;
 import com.hyy.ibook.VO.BookListVO;
 import com.hyy.ibook.service.BookListService;
 import com.hyy.ibook.service.BookNameService;
+import com.hyy.ibook.service.ChannelService;
 import com.hyy.ibook.service.KeywordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,8 @@ public class Test {
     private BookListService bookListService;
     @Resource
     private KeywordService keywordService;
+    @Resource
+    private ChannelService channelService;
 
     @RequestMapping("/book")
     public R<List<BookName>> book(@RequestParam(required = false) String keyword,
@@ -46,6 +50,7 @@ public class Test {
 
         IPage<BookName> rs = bookNameService.page(new Page<>(page, limit), Wrappers.<BookName>lambdaQuery()
                 .like(StringUtils.isNotBlank(keyword),BookName::getName, keyword)
+                .eq(BookName::getChannelId,channelId)
                 .orderByDesc(BookName::getHeat)
                 .orderByDesc(BookName::getUpdateTime));
         if(rs.getTotal() == 0) {
@@ -56,6 +61,7 @@ public class Test {
             }
             rs = bookNameService.page(new Page<>(page, limit), Wrappers.<BookName>lambdaQuery()
                     .like(StringUtils.isNotBlank(keyword),BookName::getName, keyword)
+                    .eq(BookName::getChannelId,channelId)
                     .orderByDesc(BookName::getHeat)
                     .orderByDesc(BookName::getUpdateTime));
         }
@@ -110,5 +116,10 @@ public class Test {
         for(BookName bookName : list) {
             bookNameService.updateBookList(bookName.getId().toString());
         }
+    }
+
+    @GetMapping("/channel")
+    public R<List<Channel>> channel() {
+        return R.ok(channelService.list());
     }
 }

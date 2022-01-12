@@ -12,6 +12,7 @@
     a:hover{text-decoration:underline;}
     #top {margin-left: 20%}
     #name {width: 400px;height: 60px;}
+    #channel {width: 80px;height: 60px;}
     #more {text-align: center;font-size: 20px;color: #01AAED}
 </style>
 
@@ -19,6 +20,9 @@
 <script type="text/javascript" src="layui/layui.js"></script>
 <body>
     <div id="top">
+        <div class="layui-input-inline">
+            <select id="channel" class="layui-input"></select>
+        </div>
         <div class="layui-input-inline">
             <input type="text" id="name" autocomplete="off" placeholder="书名" class="layui-input">
         </div>
@@ -40,6 +44,7 @@
             dataType: "json",
             data: {
                 keyword: $("#name").val(),
+                channelId: $("#channel").val(),
                 page: 1,
                 limit: limit
             },
@@ -51,6 +56,25 @@
                 }
                 content += "<hr><div onclick=\"next()\" id=\"more\">加载更多</div>";
                 $("#content").html(content);
+            }, error: function () {
+                alert("异常");
+                return false;
+            }
+        })
+    }
+
+    function channel() {
+        $.ajax({
+            url: ip + "test/channel",
+            dataType: "json",
+            type: "get",
+            success: function (data) {
+                var content = "";
+                for(var i = 0;i < data.data.length;i++) {
+                    content += "<option value='"+data.data[i].id+"'>"+data.data[i].channelName+"</option>"
+                }
+                console.log(content);
+                $("#channel").html(content);
             }, error: function () {
                 alert("异常");
                 return false;
@@ -85,6 +109,7 @@
     });
 
     window.onload=function() {
+        channel();
         search();
         bookrack();
     }
