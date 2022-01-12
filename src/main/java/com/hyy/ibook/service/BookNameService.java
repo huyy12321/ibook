@@ -17,7 +17,7 @@ public interface BookNameService extends IService<BookName> {
      * 同步书名
      * @param keyword
      */
-    void updateBookName(String keyword);
+    void updateBookName(String keyword,Integer channelId);
 
     /**
      * 同步书籍目录
@@ -29,7 +29,7 @@ public interface BookNameService extends IService<BookName> {
      * 同步书籍内容
      * @param id
      */
-    void updateBookInfo(String id,Integer listId);
+    void updateBookInfo(Integer listId);
 
     void down(Integer id);
 }

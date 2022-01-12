@@ -13,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface KeywordService extends IService<Keyword> {
 
+    /**
+     * 增加关键字搜索记录
+     * @param keyword 关键字
+     */
+    void addKeyword(String keyword);
 }

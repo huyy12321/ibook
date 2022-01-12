@@ -29,11 +29,8 @@
 <script>
     function search() {
         $.ajax({
-            url: ip + "test/bookList",
+            url: ip + "test/bookList/"+GetQueryValue("bookId"),
             dataType: "json",
-            data: {
-                id: GetQueryValue("bookId")
-            },
             type: "get",
             success: function (data) {
                 if(data.data.bookLists.length === 0) {
@@ -114,9 +111,10 @@
         var list = JSON.parse(bookrack);
         if(list != null) {
             for(var i = 0;i<list.length;i++) {
-                if(list[i].id === GetQueryValue("bookId"));
-                list.splice(i,1);
-                break;
+                if(list[i].id === GetQueryValue("bookId")){
+                    list.splice(i,1);
+                    break;
+                }
             }
         }
         $("#bookrack").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;加入收藏");

@@ -43,12 +43,8 @@
 
     function search() {
         $.ajax({
-            url: ip + "test/info",
+            url: ip + "test/info/"+GetQueryValue("bookListId"),
             dataType: "json",
-            data: {
-                id: GetQueryValue("bookId"),
-                listId: GetQueryValue("bookListId")
-            },
             type: "get",
             success: function (data) {
                 $("#info").append("<p>"+data.data[0].listName+"</p>"+data.data[0].listInfo);
@@ -66,12 +62,8 @@
 
     function nextPage() {
         $.ajax({
-            url: ip + "test/info",
+            url: ip + "test/info/"+nextId,
             dataType: "json",
-            data: {
-                id: GetQueryValue("bookId"),
-                listId: nextId
-            },
             type: "get",
             success: function (data) {
                 $("#info").append("<p>"+data.data[0].listName+"</p>"+data.data[0].listInfo);
