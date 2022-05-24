@@ -1,6 +1,6 @@
 package com.hyy.ibook.mapper;
 
-import com.hyy.ibook.Entity.Keyword;
+import com.hyy.ibook.entity.Keyword;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

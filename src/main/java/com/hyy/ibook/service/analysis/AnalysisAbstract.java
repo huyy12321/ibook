@@ -1,6 +1,6 @@
 package com.hyy.ibook.service.analysis;
 
-import com.hyy.ibook.Entity.Channel;
+import com.hyy.ibook.entity.Channel;
 
 /**
  * @author huyangyang

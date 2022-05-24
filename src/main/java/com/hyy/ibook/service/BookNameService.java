@@ -1,6 +1,6 @@
 package com.hyy.ibook.service;
 
-import com.hyy.ibook.Entity.BookName;
+import com.hyy.ibook.entity.BookName;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -27,7 +27,6 @@ public interface BookNameService extends IService<BookName> {
 
     /**
      * 同步书籍内容
-     * @param id
      */
     void updateBookInfo(Integer listId);
 

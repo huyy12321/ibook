@@ -1,7 +1,7 @@
 package com.hyy.ibook.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.hyy.ibook.Entity.*;
+import com.hyy.ibook.entity.*;
 import com.hyy.ibook.mapper.BookNameMapper;
 import com.hyy.ibook.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -108,7 +108,7 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
             }
         }
         baseMapper.updateById(BookName.builder().id(id)
-                .downUrl("http://112.74.39.252/static1/book/" +bookName.getName() +".txt")
+                .downUrl("http://124.222.253.95/static1/book/" +bookName.getName() +".txt")
                 .downNewList(list1.get(list1.size()-1).getId()).downStatus(2).build());
     }
 }

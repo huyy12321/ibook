@@ -1,6 +1,6 @@
 package com.hyy.ibook.service.impl;
 
-import com.hyy.ibook.Entity.SearchKey;
+import com.hyy.ibook.entity.SearchKey;
 import com.hyy.ibook.mapper.SearchKeyMapper;
 import com.hyy.ibook.service.SearchKeyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

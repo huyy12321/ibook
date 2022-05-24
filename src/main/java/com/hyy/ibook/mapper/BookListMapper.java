@@ -1,8 +1,8 @@
 package com.hyy.ibook.mapper;
 
-import com.hyy.ibook.Entity.BookList;
+import com.hyy.ibook.entity.BookList;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hyy.ibook.VO.BookListVO;
+import com.hyy.ibook.vo.BookListVO;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

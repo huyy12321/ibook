@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://112.74.39.252:3306/ibook?useSSL=false
+    url: jdbc:mysql://124.222.253.95:3306/ibook?useSSL=false
     username: root
     password: 123456
 mybatis-plus:

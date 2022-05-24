@@ -3,7 +3,7 @@ package com.hyy.ibook.service.analysis;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyy.ibook.Entity.*;
+import com.hyy.ibook.entity.*;
 import com.hyy.ibook.mapper.BookNameMapper;
 import com.hyy.ibook.service.*;
 import org.apache.commons.lang3.StringUtils;

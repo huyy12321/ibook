@@ -1,6 +1,6 @@
 package com.hyy.ibook.service.impl;
 
-import com.hyy.ibook.Entity.Channel;
+import com.hyy.ibook.entity.Channel;
 import com.hyy.ibook.mapper.ChannelMapper;
 import com.hyy.ibook.service.ChannelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

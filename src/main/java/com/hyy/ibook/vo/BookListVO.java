@@ -1,4 +1,4 @@
-package com.hyy.ibook.VO;
+package com.hyy.ibook.vo;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package com.hyy.ibook.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.hyy.ibook.Entity.Keyword;
+import com.hyy.ibook.entity.Keyword;
 import com.hyy.ibook.mapper.KeywordMapper;
 import com.hyy.ibook.service.KeywordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

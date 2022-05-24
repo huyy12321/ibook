@@ -1,8 +1,7 @@
 package com.hyy.ibook.mapper;
 
-import com.hyy.ibook.Entity.Channel;
+import com.hyy.ibook.entity.Channel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>

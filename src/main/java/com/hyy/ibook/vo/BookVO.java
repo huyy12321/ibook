@@ -1,8 +1,6 @@
-package com.hyy.ibook.VO;
+package com.hyy.ibook.vo;
 
-import com.hyy.ibook.Entity.BookList;
-import com.hyy.ibook.Entity.BookName;
-import com.hyy.ibook.VO.BookListVO;
+import com.hyy.ibook.entity.BookName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

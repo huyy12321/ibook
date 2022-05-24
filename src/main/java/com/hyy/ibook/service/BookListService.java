@@ -1,8 +1,8 @@
 package com.hyy.ibook.service;
 
-import com.hyy.ibook.Entity.BookList;
+import com.hyy.ibook.entity.BookList;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hyy.ibook.VO.BookListVO;
+import com.hyy.ibook.vo.BookListVO;
 
 import java.util.List;
 

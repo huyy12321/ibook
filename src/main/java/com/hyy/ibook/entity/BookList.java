@@ -1,10 +1,11 @@
-package com.hyy.ibook.Entity;
+package com.hyy.ibook.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -16,9 +17,12 @@ import lombok.experimental.Accessors;
  * @since 2021-10-08
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Channel implements Serializable {
+public class BookList implements Serializable {
 
     private static final long serialVersionUID=1L;
 
@@ -26,24 +30,25 @@ public class Channel implements Serializable {
     private Integer id;
 
     /**
-     * 渠道名称
+     * 章节名称
      */
-    private String channelName;
+    private String listName;
+
+    private Integer bookId;
+
+    private String listId;
 
     /**
-     * 渠道官网地址
+     * 文章详情
      */
-    private String channelUrl;
+    private String listInfo;
 
     /**
-     * 模糊搜索地址
+     * 章节数
      */
-    private String likeUrl;
+    private String listNumber;
 
-    /**
-     * 详情地址
-     */
-    private String infoUrl;
+    private LocalDateTime updateTime;
 
 
 }
