@@ -46,4 +46,8 @@ public class Channel implements Serializable {
     private String infoUrl;
 
 
+    /**
+     * 处理类
+     */
+    private String strategy;
 }

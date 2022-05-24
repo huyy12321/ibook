@@ -1,5 +1,5 @@
 var ip = "http://localhost:8081/";
-// var ip = "http://112.74.39.252:8081/";
+// var ip = "http://124.222.253.95:8081/";
 
 function GetQueryValue(queryName) {
     var query = decodeURI(window.location.search.substring(1));

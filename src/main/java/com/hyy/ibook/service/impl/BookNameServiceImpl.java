@@ -3,10 +3,12 @@ package com.hyy.ibook.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.hyy.ibook.entity.*;
 import com.hyy.ibook.mapper.BookNameMapper;
+import com.hyy.ibook.mapper.ChannelMapper;
 import com.hyy.ibook.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hyy.ibook.service.analysis.AnalysisAbstract;
 import com.hyy.ibook.service.analysis.Biquge;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -27,22 +29,19 @@ import java.util.Map;
  * @since 2021-10-08
  */
 @Service
+@RequiredArgsConstructor
 public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> implements BookNameService {
-    @Resource
-    private BookListService bookListService;
-    @Resource
-    private Biquge biquge;
-    private final Map<String, AnalysisAbstract> map = new HashMap<>();
 
-    @PostConstruct
-    public void init() {
-        map.put(biquge.getChannel().getId().toString(),biquge);
-    }
+    private final BookListService bookListService;
+    private final Map<String, AnalysisAbstract> map;
+    private final ChannelMapper channelMapper;
+
 
     @Override
     @Async
     public void updateBookName(String keyword,Integer channelId) {
-        AnalysisAbstract analysisAbstract = map.get(channelId.toString());
+        Channel channel = channelMapper.selectById(channelId);
+        AnalysisAbstract analysisAbstract = map.get(channel.getStrategy());
         analysisAbstract.analysisSearch(keyword);
     }
 
@@ -50,7 +49,8 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
     @Async
     public void updateBookList(String id) {
         BookName bookName = baseMapper.selectById(id);
-        AnalysisAbstract analysisAbstract = map.get(bookName.getChannelId().toString());
+        Channel channel = channelMapper.selectById(bookName.getChannelId());
+        AnalysisAbstract analysisAbstract = map.get(channel.getStrategy());
         analysisAbstract.analysisList(id);
     }
 
@@ -58,7 +58,8 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
     public void updateBookInfo(Integer listId) {
         BookList byId = bookListService.getById(listId);
         BookName bookName = baseMapper.selectById(byId.getBookId());
-        AnalysisAbstract analysisAbstract = map.get(bookName.getChannelId().toString());
+        Channel channel = channelMapper.selectById(bookName.getChannelId());
+        AnalysisAbstract analysisAbstract = map.get(channel.getStrategy());
         analysisAbstract.analysisInfo(listId.toString());
     }
 
