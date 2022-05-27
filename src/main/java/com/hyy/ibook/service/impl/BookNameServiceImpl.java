@@ -109,7 +109,7 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
             }
         }
         baseMapper.updateById(BookName.builder().id(id)
-                .downUrl("http://124.222.253.95/static1/book/" +bookName.getName() +".txt")
+                .downUrl("http://124.222.253.95/static/book/" +bookName.getName() +".txt")
                 .downNewList(list1.get(list1.size()-1).getId()).downStatus(2).build());
     }
 }

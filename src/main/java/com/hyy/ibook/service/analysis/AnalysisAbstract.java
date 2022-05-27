@@ -25,10 +25,4 @@ public abstract class AnalysisAbstract {
      */
     public abstract void analysisInfo(String id);
 
-    /**
-     * 获取渠道
-     * @return 渠道信息
-     */
-    public abstract Channel getChannel();
-
 }

@@ -3,9 +3,14 @@ package com.hyy.ibook.service.analysis;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hyy.ibook.entity.*;
+import com.hyy.ibook.entity.BookList;
+import com.hyy.ibook.entity.BookName;
+import com.hyy.ibook.entity.Channel;
+import com.hyy.ibook.entity.SearchKey;
 import com.hyy.ibook.mapper.BookNameMapper;
-import com.hyy.ibook.service.*;
+import com.hyy.ibook.service.BookListService;
+import com.hyy.ibook.service.ChannelService;
+import com.hyy.ibook.service.SearchKeyService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -34,7 +39,7 @@ import java.util.List;
  * @author huyangyang
  */
 @Service
-public class Biquge extends AnalysisAbstract{
+public class Biququ extends AnalysisAbstract{
     @Resource
     private SearchKeyService searchKeyService;
     @Resource
@@ -47,7 +52,7 @@ public class Biquge extends AnalysisAbstract{
     /**
      * 书源
      */
-    protected String channelName = "笔趣阁";
+    protected String channelName = "笔趣趣";
 
     @Override
     public void analysisSearch(String keyword) {
@@ -72,23 +77,23 @@ public class Biquge extends AnalysisAbstract{
             if (responseEntity != null) {
                 Document document = Jsoup.parse(EntityUtils.toString(responseEntity,"UTF-8"));
 
-                //像js一样，通过id 获取文章列表元素对象
-                Elements tr = document.getElementsByTag("tr");
-                for(Element element : tr) {
-                    if(element.child(0).children().size() > 0) {
-                        String bookId = element.child(0).child(0).attr("href");
-                        BookName one1 = bookNameMapper.selectOne(Wrappers.<BookName>lambdaQuery().
-                                eq(BookName::getBookId, bookId).
-                                eq(BookName::getChannelId, channel.getId()));
-                        if(one1 == null) {
-                            bookNameMapper.insert(BookName.builder().
-                                    bookId(bookId).
-                                    account(element.child(2).text()).
-                                    name(element.child(0).child(0).text()).
-                                    channelId(channel.getId()).
-                                    updateTime(LocalDateTime.now()).build());
-                        }
+
+                Elements tr = document.getElementsByClass("search-list").get(0).getElementsByTag("ul").get(0).getElementsByTag("li");
+                for(int i = 1;i<tr.size();i++) {
+                    Elements children = tr.get(i).children();
+                    String bookId = children.get(1).child(0).attr("href");
+                    BookName one1 = bookNameMapper.selectOne(Wrappers.<BookName>lambdaQuery().
+                            eq(BookName::getBookId, bookId).
+                            eq(BookName::getChannelId, channel.getId()));
+                    if(one1 == null) {
+                        bookNameMapper.insert(BookName.builder().
+                                bookId(bookId).
+                                account(children.get(3).text()).
+                                name(children.get(1).text()).
+                                channelId(channel.getId()).
+                                updateTime(LocalDateTime.now()).build());
                     }
+
                 }
             }
         } catch (Exception e) {
@@ -120,7 +125,7 @@ public class Biquge extends AnalysisAbstract{
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-        HttpGet httpGet = new HttpGet(channel.getInfoUrl().replace("{bookId}",bookName.getBookId()));
+        HttpGet httpGet = new HttpGet(bookName.getBookId());
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpGet);
@@ -136,7 +141,7 @@ public class Biquge extends AnalysisAbstract{
                 String href = document.getElementById("info").child(4).child(0).attr("href");
                 String src = document.getElementById("fmimg").child(0).attr("src");
 
-                bookName.setImgUrl(channel.getChannelUrl() + src);
+                bookName.setImgUrl(src);
                 bookName.setUpdateTime(LocalDateTime.now());
                 bookNameMapper.updateById(bookName);
 
@@ -194,7 +199,7 @@ public class Biquge extends AnalysisAbstract{
             if (responseEntity != null) {
                 Document document = Jsoup.parse(EntityUtils.toString(responseEntity, "UTF-8"));
                 System.out.println(document.getElementsByClass("bookname").first().child(0).text());
-                bookList.setListInfo(document.getElementById("content").toString());
+                bookList.setListInfo(document.getElementById("content").getElementsByClass("read_tj").nextAll().toString());
                 bookList.setUpdateTime(LocalDateTime.now());
                 bookListService.updateById(bookList);
             }
