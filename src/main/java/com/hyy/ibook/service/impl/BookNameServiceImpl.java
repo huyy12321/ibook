@@ -83,6 +83,7 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
             }
         }
 
+        // todo 后续可以改成往文件里追加的方式
         List<BookList> list1 = bookListService.list(Wrappers.<BookList>lambdaQuery().eq(BookList::getBookId, id));
         File file = new File("/hyy/static/book/"+bookName.getName() + ".txt");
         FileOutputStream fileOutputStream = null;
@@ -92,7 +93,9 @@ public class BookNameServiceImpl extends ServiceImpl<BookNameMapper, BookName> i
                 fileOutputStream.write(bookList.getListName().getBytes());
                 fileOutputStream.write(bookList.getListInfo()
                         .replace("<div id=\"center_tip\">","")
+                        .replace("<div id=\"content\">","")
                         .replace("&nbsp;&nbsp;&nbsp;&nbsp;","")
+                        .replace("<b>最新网址：www.mayiwxw.com</b>","")
                         .replace("<br>","")
                         .replace("</div>","")
                         .getBytes());

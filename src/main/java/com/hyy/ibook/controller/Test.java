@@ -122,4 +122,13 @@ public class Test {
     public R<List<Channel>> channel() {
         return R.ok(channelService.list());
     }
+
+    @GetMapping("/update")
+    public void update() {
+        List<BookList> list = bookListService.list(Wrappers.<BookList>lambdaQuery().eq(BookList::getBookId, 66).isNotNull(BookList::getListInfo));
+        list.forEach(t->{
+            t.setListInfo(t.getListInfo().replace("<p>", "&nbsp;&nbsp;&nbsp;&nbsp;").replace("</p>", "<br>"));
+        });
+        bookListService.updateBatchById(list);
+    }
 }

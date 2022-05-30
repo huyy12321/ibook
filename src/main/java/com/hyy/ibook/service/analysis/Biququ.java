@@ -199,7 +199,7 @@ public class Biququ extends AnalysisAbstract{
             if (responseEntity != null) {
                 Document document = Jsoup.parse(EntityUtils.toString(responseEntity, "UTF-8"));
                 System.out.println(document.getElementsByClass("bookname").first().child(0).text());
-                bookList.setListInfo(document.getElementById("content").getElementsByClass("read_tj").nextAll().toString());
+                bookList.setListInfo(document.getElementById("content").getElementsByClass("read_tj").nextAll().toString().replace("<p>", "&nbsp;&nbsp;&nbsp;&nbsp;").replace("</p>", ""));
                 bookList.setUpdateTime(LocalDateTime.now());
                 bookListService.updateById(bookList);
             }
