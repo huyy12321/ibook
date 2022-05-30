@@ -25,7 +25,7 @@ public class KeywordServiceImpl extends ServiceImpl<KeywordMapper, Keyword> impl
         Keyword keyword1 = baseMapper.selectOne(Wrappers.<Keyword>lambdaQuery()
                 .eq(Keyword::getKeyword, keyword));
         if(keyword1 == null) {
-            baseMapper.insert(Keyword.builder().keyword(keyword).updateTime(LocalDateTime.now()).build());
+            baseMapper.insert(Keyword.builder().keyword(keyword).count(0).updateTime(LocalDateTime.now()).build());
         } else{
             keyword1.setUpdateTime(LocalDateTime.now());
             keyword1.setCount(keyword1.getCount() + 1);

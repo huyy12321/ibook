@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 24/05/2022 15:36:15
+ Date: 30/05/2022 10:03:02
 */
 
 SET NAMES utf8mb4;
@@ -26,15 +26,11 @@ CREATE TABLE `book_list`  (
   `list_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `book_id` int(0) NULL DEFAULT NULL,
   `list_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `list_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `list_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
   `list_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `update_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of book_list
--- ----------------------------
+) ENGINE = InnoDB  CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for book_name
@@ -49,16 +45,13 @@ CREATE TABLE `book_name`  (
   `info` varchar(10000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `img_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `heat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `heat` int(0) NULL DEFAULT 0,
   `down_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `down_new_list` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `down_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  `down_status` int(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `name_index`(`name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of book_name
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for channel
@@ -70,13 +63,12 @@ CREATE TABLE `channel`  (
   `channel_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `like_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `info_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `strategy` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of channel
--- ----------------------------
-INSERT INTO `channel` VALUES (1, '笔趣阁', 'https://www.mayiwxw.com/', 'https://www.mayiwxw.com/modules/article/search.php', 'https://www.mayiwxw.com/{bookId}/index.html');
+INSERT INTO `channel` VALUES (1, '笔趣阁', 'https://www.mayiwxw.com/', 'https://www.mayiwxw.com/modules/article/search.php', 'https://www.mayiwxw.com/{bookId}/index.html', 'biquge');
+INSERT INTO `channel` VALUES (2, '笔趣趣', 'http://www.biququ.com/', 'http://www.biququ.com/search.php', 'http://www.biququ.com', 'biququ');
 
 -- ----------------------------
 -- Table structure for keyword
@@ -91,10 +83,6 @@ CREATE TABLE `keyword`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of keyword
--- ----------------------------
-
--- ----------------------------
 -- Table structure for search_key
 -- ----------------------------
 DROP TABLE IF EXISTS `search_key`;
@@ -105,9 +93,8 @@ CREATE TABLE `search_key`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of search_key
--- ----------------------------
 INSERT INTO `search_key` VALUES (1, 'searchkey', 1);
+INSERT INTO `search_key` VALUES (2, 'keyword', 2);
+
 
 SET FOREIGN_KEY_CHECKS = 1;

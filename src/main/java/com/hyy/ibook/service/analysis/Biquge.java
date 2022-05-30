@@ -82,7 +82,7 @@ public class Biquge extends AnalysisAbstract{
                                 eq(BookName::getChannelId, channel.getId()));
                         if(one1 == null) {
                             bookNameMapper.insert(BookName.builder().
-                                    bookId(bookId).
+                                    bookId(bookId).heat(0).downStatus(0).
                                     account(element.child(2).text()).
                                     name(element.child(0).child(0).text()).
                                     channelId(channel.getId()).
