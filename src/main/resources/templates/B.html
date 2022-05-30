@@ -94,10 +94,10 @@
             dataType: "json",
             type: "get",
             success: function (data) {
-                if(data.code === 500) {
-                    alert(data.msg);
-                } else{
+                if(data.code === 0) {
                     window.location.href=data.data;
+                } else{
+                    alert(data.msg);
                 }
             }, error: function () {
                 alert("异常");
