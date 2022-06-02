@@ -87,7 +87,7 @@ public class Biququ extends AnalysisAbstract{
                             eq(BookName::getChannelId, channel.getId()));
                     if(one1 == null) {
                         bookNameMapper.insert(BookName.builder().
-                                bookId(bookId).
+                                bookId(bookId).heat(0).downStatus(0).
                                 account(children.get(3).text()).
                                 name(children.get(1).text()).
                                 channelId(channel.getId()).
@@ -199,7 +199,7 @@ public class Biququ extends AnalysisAbstract{
             if (responseEntity != null) {
                 Document document = Jsoup.parse(EntityUtils.toString(responseEntity, "UTF-8"));
                 System.out.println(document.getElementsByClass("bookname").first().child(0).text());
-                bookList.setListInfo(document.getElementById("content").getElementsByClass("read_tj").nextAll().toString().replace("<p>", "&nbsp;&nbsp;&nbsp;&nbsp;").replace("</p>", ""));
+                bookList.setListInfo(document.getElementById("content").getElementsByClass("read_tj").nextAll().toString().replace("<p>", "&nbsp;&nbsp;&nbsp;&nbsp;").replace("</p>", "<br>"));
                 bookList.setUpdateTime(LocalDateTime.now());
                 bookListService.updateById(bookList);
             }
