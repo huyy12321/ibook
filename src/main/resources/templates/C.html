@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <style>
-    #info {font-size: 30px}
+    #info {font-size: 20px}
     #info p {font-size: 50px;font-weight: bolder}
     #list,#next {width:50%;color: #1E9FFF;text-align: center;font-size: 50px}
     a:hover{text-decoration:underline;}
@@ -34,6 +34,7 @@
                 contentH =$("#info").get(0).scrollHeight,//内容高度
                 next1 =$("#next1").get(0).scrollHeight,//内容高度
                 scrollTop =$(this).scrollTop();//滚动高度
+            console.log(contentH + "----" + (viewH + scrollTop - next1));
             if(contentH === viewH + scrollTop - next1){
                 nextPage();
             }

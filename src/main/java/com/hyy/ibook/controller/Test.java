@@ -49,7 +49,8 @@ public class Test {
         keywordService.addKeyword(keyword);
 
         IPage<BookName> rs = bookNameService.page(new Page<>(page, limit), Wrappers.<BookName>lambdaQuery()
-                .like(StringUtils.isNotBlank(keyword),BookName::getName, keyword)
+                .and(t->t.like(StringUtils.isNotBlank(keyword),BookName::getAccount, keyword).or()
+                        .like(StringUtils.isNotBlank(keyword),BookName::getName, keyword))
                 .eq(BookName::getChannelId,channelId)
                 .orderByDesc(BookName::getHeat)
                 .orderByDesc(BookName::getUpdateTime));
