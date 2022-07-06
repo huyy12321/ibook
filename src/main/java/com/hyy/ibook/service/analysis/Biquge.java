@@ -47,7 +47,7 @@ public class Biquge extends AnalysisAbstract{
     /**
      * 书源
      */
-    protected String channelName = "笔趣阁";
+    protected String channelName = "书源1";
 
     @Override
     public void analysisSearch(String keyword) {

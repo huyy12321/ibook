@@ -52,7 +52,7 @@ public class Biququ extends AnalysisAbstract{
     /**
      * 书源
      */
-    protected String channelName = "笔趣趣";
+    protected String channelName = "书源2";
 
     @Override
     public void analysisSearch(String keyword) {
